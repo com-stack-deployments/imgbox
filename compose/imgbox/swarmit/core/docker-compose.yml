@@ -2,7 +2,7 @@
 services:
   logs:
     env_file: .env.logs
-    image: registry.dpl.comstack.de/asset/dozzle:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/dozzle:swarmit-Q0225b
     labels:
       - com.swarmit.version=0.1
       - com.swarmit.asset=imgbox_swarmit_core_logs
