@@ -71,7 +71,7 @@ services:
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_PORT: "443"
-      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_PROTOCOL: "https://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
       SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
@@ -115,6 +115,13 @@ services:
       - --entrypoints.ping.address=:8082
       - --entrypoints.web.address=:80
       - --entrypoints.web.transport.respondingTimeouts.readTimeout=30m
+      - --serversTransport.insecureSkipVerify=${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
+      - --entrypoints.web.http.redirections.entryPoint.to=web-secure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.web-secure.address=:443
+      - --entrypoints.web-secure.transport.respondingTimeouts.readTimeout=30m
+      - --entrypoints.web-secure.forwardedHeaders.insecure=true
+      - --entrypoints.web-secure.proxyProtocol.insecure=true
       - --entrypoints.fsync.address=:9932
       - --entrypoints.fsync.proxyProtocol.insecure=true
       - --entrypoints.git.address=:9922
@@ -218,7 +225,7 @@ services:
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_NETWORK: "imgbox_public"
       SWARMIT_INGRESS_PORT: "443"
-      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_PROTOCOL: "https://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
       SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
@@ -322,7 +329,7 @@ services:
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_PORT: "443"
-      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_PROTOCOL: "https://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
       SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
@@ -433,7 +440,7 @@ services:
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_PORT: "443"
-      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_PROTOCOL: "https://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
       SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}

@@ -98,8 +98,9 @@ export SWARMIT_INGRESS_SKIP_SSL_VERIFY="False"
 
 |Param|Value|Desc|
 |--|--|--|
-|ingress-protocol|http://|Protocol to use for deployment|
+|ingress-protocol|https://|Protocol to use for deployment|
 |ingress-base-domain|example.com|Domain to set for deployment|
+|ingress-le-enable|True|Enable cert creation using letsencrypt|
 
 ## Service URLs
 
