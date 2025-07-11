@@ -16,7 +16,7 @@ services:
       - com.swarmit.core.version=alpha-0.1
       - com.swarmit.feature.ingress.enabled=True
       - com.swarmit.ingress.version=alpha-0.1
-      - traefik.http.routers.imgbox_swarmit_ingress_http-code-pages.entrypoints=web
+      - traefik.http.routers.imgbox_swarmit_ingress_http-code-pages.entrypoints=web-secure
       - traefik.http.routers.imgbox_swarmit_ingress_http-code-pages.rule=HostRegexp(`{host:.+}`)
       - traefik.http.routers.imgbox_swarmit_ingress_http-code-pages.priority=10
       - traefik.http.routers.imgbox_swarmit_ingress_http-code-pages.middlewares=ingress-errors@file
@@ -43,9 +43,9 @@ services:
       start_period: 2s
     environment:
       INFRA_INGRESS_DOMAIN: ".${SWARMIT_INGRESS_BASE_DOMAIN}"
-      INFRA_INGRESS_URL: "http://${SWARMIT_INGRESS_BASE_DOMAIN}"
+      INFRA_INGRESS_URL: "https://${SWARMIT_INGRESS_BASE_DOMAIN}"
       SERVICE_INGRESS_DOMAIN: "http-code-pages.${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SERVICE_INGRESS_URL: "http://http-code-pages.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SERVICE_INGRESS_URL: "https://http-code-pages.${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_BOX: "swarmit"
       SWARMIT_CORE_ENABLED: "[]"
       SWARMIT_IMAGES_ENABLED: "[]"
@@ -67,10 +67,10 @@ services:
       SWARMIT_INGRESS_LE_DNS_PROVIDER: ""
       SWARMIT_INGRESS_LE_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_LE_EMAIL: "mail@${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SWARMIT_INGRESS_LE_ENABLE: "False"
+      SWARMIT_INGRESS_LE_ENABLE: "True"
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SWARMIT_INGRESS_PORT: "80"
+      SWARMIT_INGRESS_PORT: "443"
       SWARMIT_INGRESS_PROTOCOL: "http://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
@@ -138,7 +138,9 @@ services:
       - com.swarmit.asset.isPublic=True
       - traefik.constraint-label=traefik-public
       - traefik.http.services.imgbox_swarmit_ingress_traefik.loadbalancer.server.port=8080
-      - traefik.http.routers.imgbox_swarmit_ingress_traefik.entrypoints=web
+      - traefik.http.routers.imgbox_swarmit_ingress_traefik.tls=true
+      - traefik.http.routers.imgbox_swarmit_ingress_traefik.tls.certresolver=le
+      - traefik.http.routers.imgbox_swarmit_ingress_traefik.entrypoints=web-secure
       - traefik.http.middlewares.auth.basicauth.usersfile=/etc/traefik/dbusers
       - traefik.http.routers.imgbox_swarmit_ingress_traefik.middlewares=auth,ingress-errors@file
       - traefik.http.routers.imgbox_swarmit_ingress_traefik.rule=Host(`proxy.${SWARMIT_INGRESS_BASE_DOMAIN}`) && (PathPrefix(`/dashboard/`) || PathPrefix(`/api/`))
@@ -186,9 +188,9 @@ services:
       start_period: 2s
     environment:
       INFRA_INGRESS_DOMAIN: ".${SWARMIT_INGRESS_BASE_DOMAIN}"
-      INFRA_INGRESS_URL: "http://${SWARMIT_INGRESS_BASE_DOMAIN}"
+      INFRA_INGRESS_URL: "https://${SWARMIT_INGRESS_BASE_DOMAIN}"
       SERVICE_INGRESS_DOMAIN: "proxy.${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SERVICE_INGRESS_URL: "http://proxy.${SWARMIT_INGRESS_BASE_DOMAIN}/dashboard/"
+      SERVICE_INGRESS_URL: "https://proxy.${SWARMIT_INGRESS_BASE_DOMAIN}/dashboard/"
       SWARMIT_BOX: "swarmit"
       SWARMIT_CORE_ENABLED: "[]"
       SWARMIT_IMAGES_ENABLED: "[]"
@@ -211,17 +213,17 @@ services:
       SWARMIT_INGRESS_LE_DNS_PROVIDER: ""
       SWARMIT_INGRESS_LE_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_LE_EMAIL: "mail@${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SWARMIT_INGRESS_LE_ENABLE: "False"
+      SWARMIT_INGRESS_LE_ENABLE: "True"
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_NETWORK: "imgbox_public"
-      SWARMIT_INGRESS_PORT: "80"
+      SWARMIT_INGRESS_PORT: "443"
       SWARMIT_INGRESS_PROTOCOL: "http://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
       SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
       SWARMIT_INGRESS_STACK_DOMAIN: "True"
-      SWARMIT_INGRESS_URLS: "http://registry.${SWARMIT_INGRESS_BASE_DOMAIN} http://images.${SWARMIT_INGRESS_BASE_DOMAIN} http://logs.${SWARMIT_INGRESS_BASE_DOMAIN} http://proxy.${SWARMIT_INGRESS_BASE_DOMAIN}/dashboard/ http://proxy.${SWARMIT_INGRESS_BASE_DOMAIN}/api/ http://webaccess.${SWARMIT_INGRESS_BASE_DOMAIN} http://goaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_INGRESS_URLS: "https://registry.${SWARMIT_INGRESS_BASE_DOMAIN} https://images.${SWARMIT_INGRESS_BASE_DOMAIN} https://logs.${SWARMIT_INGRESS_BASE_DOMAIN} https://proxy.${SWARMIT_INGRESS_BASE_DOMAIN}/dashboard/ https://proxy.${SWARMIT_INGRESS_BASE_DOMAIN}/api/ https://webaccess.${SWARMIT_INGRESS_BASE_DOMAIN} https://goaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_LOGOHOST: ${SWARMIT_LOGOHOST}
       SWARMIT_PATH: "/app/swarmit/"
       SWARMIT_PROVIDER: "swarm"
@@ -266,7 +268,9 @@ services:
       - com.swarmit.asset.isPublic=True
       - traefik.constraint-label=traefik-public
       - traefik.http.services.imgbox_swarmit_ingress_httpd.loadbalancer.server.port=80
-      - traefik.http.routers.imgbox_swarmit_ingress_httpd.entrypoints=web
+      - traefik.http.routers.imgbox_swarmit_ingress_httpd.tls=true
+      - traefik.http.routers.imgbox_swarmit_ingress_httpd.tls.certresolver=le
+      - traefik.http.routers.imgbox_swarmit_ingress_httpd.entrypoints=web-secure
       - traefik.http.middlewares.auth.basicauth.usersfile=/etc/traefik/dbusers
       - traefik.http.routers.imgbox_swarmit_ingress_httpd.middlewares=frameHeader@file,auth,ingress-errors@file
       - traefik.http.routers.imgbox_swarmit_ingress_httpd.rule=Host(`webaccess.${SWARMIT_INGRESS_BASE_DOMAIN}`)
@@ -290,9 +294,9 @@ services:
       start_period: 60s
     environment:
       INFRA_INGRESS_DOMAIN: ".${SWARMIT_INGRESS_BASE_DOMAIN}"
-      INFRA_INGRESS_URL: "http://${SWARMIT_INGRESS_BASE_DOMAIN}"
+      INFRA_INGRESS_URL: "https://${SWARMIT_INGRESS_BASE_DOMAIN}"
       SERVICE_INGRESS_DOMAIN: "webaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SERVICE_INGRESS_URL: "http://webaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SERVICE_INGRESS_URL: "https://webaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_BOX: "swarmit"
       SWARMIT_CORE_ENABLED: "[]"
       SWARMIT_IMAGES_ENABLED: "[]"
@@ -314,10 +318,10 @@ services:
       SWARMIT_INGRESS_LE_DNS_PROVIDER: ""
       SWARMIT_INGRESS_LE_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_LE_EMAIL: "mail@${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SWARMIT_INGRESS_LE_ENABLE: "False"
+      SWARMIT_INGRESS_LE_ENABLE: "True"
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SWARMIT_INGRESS_PORT: "80"
+      SWARMIT_INGRESS_PORT: "443"
       SWARMIT_INGRESS_PROTOCOL: "http://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
@@ -371,8 +375,10 @@ services:
       - com.swarmit.ingress.version=alpha-0.1
       - com.swarmit.asset.isPublic=True
       - traefik.constraint-label=traefik-public
-      - traefik.http.services.imgbox_swarmit_ingress_goaccess.loadbalancer.server.port=80
-      - traefik.http.routers.imgbox_swarmit_ingress_goaccess.entrypoints=web
+      - traefik.http.services.imgbox_swarmit_ingress_goaccess.loadbalancer.server.port=443
+      - traefik.http.routers.imgbox_swarmit_ingress_goaccess.tls=true
+      - traefik.http.routers.imgbox_swarmit_ingress_goaccess.tls.certresolver=le
+      - traefik.http.routers.imgbox_swarmit_ingress_goaccess.entrypoints=web-secure
       - traefik.http.routers.imgbox_swarmit_ingress_goaccess.middlewares=ingress-errors@file
       - traefik.http.routers.imgbox_swarmit_ingress_goaccess.rule=Host(`goaccess.${SWARMIT_INGRESS_BASE_DOMAIN}`)
     deploy:
@@ -398,9 +404,9 @@ services:
       start_period: 2s
     environment:
       INFRA_INGRESS_DOMAIN: ".${SWARMIT_INGRESS_BASE_DOMAIN}"
-      INFRA_INGRESS_URL: "http://${SWARMIT_INGRESS_BASE_DOMAIN}"
+      INFRA_INGRESS_URL: "https://${SWARMIT_INGRESS_BASE_DOMAIN}"
       SERVICE_INGRESS_DOMAIN: "goaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SERVICE_INGRESS_URL: "http://goaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SERVICE_INGRESS_URL: "https://goaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_BOX: "swarmit"
       SWARMIT_CORE_ENABLED: "[]"
       SWARMIT_IMAGES_ENABLED: "[]"
@@ -423,10 +429,10 @@ services:
       SWARMIT_INGRESS_LE_DNS_PROVIDER: ""
       SWARMIT_INGRESS_LE_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_LE_EMAIL: "mail@${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SWARMIT_INGRESS_LE_ENABLE: "False"
+      SWARMIT_INGRESS_LE_ENABLE: "True"
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
-      SWARMIT_INGRESS_PORT: "80"
+      SWARMIT_INGRESS_PORT: "443"
       SWARMIT_INGRESS_PROTOCOL: "http://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"

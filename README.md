@@ -76,12 +76,21 @@ export SWARMIT_INFRA="imgbox"
 # Domain to set for deployment
 # Set by: config/swarmit
 export SWARMIT_INGRESS_BASE_DOMAIN="example.com"
+# Type of challenge you want to use for letsencrypt
+# Set by: config/swarmit
+export SWARMIT_INGRESS_LE_CHALLENGE_TYPE="http-challenge"
+# Enable cert creation using letsencrypt
+# Set by: config/swarmit
+export SWARMIT_INGRESS_LE_ENABLE="True"
 # Loglevel for Traefik
 # Set by: config/swarmit
 export SWARMIT_INGRESS_LOG_LEVEL="ERROR"
 # Define what will be the ingress incoming port
 # Set by: config/swarmit
-export SWARMIT_INGRESS_PORT="80"
+export SWARMIT_INGRESS_PORT="443"
+# Sets 'insecureSkipVerify' paraneter in Traefik
+# Set by: config/swarmit
+export SWARMIT_INGRESS_SKIP_SSL_VERIFY="False"
 
 ```
 
@@ -95,12 +104,12 @@ export SWARMIT_INGRESS_PORT="80"
 ## Service URLs
 
 On successfull deployment, the following URLs will be accessible:
-- http://registry.example.com
-- http://images.example.com
-- http://logs.example.com
-- http://proxy.example.com/dashboard/
-- http://webaccess.example.com
-- http://goaccess.example.com
+- https://registry.example.com
+- https://images.example.com
+- https://logs.example.com
+- https://proxy.example.com/dashboard/
+- https://webaccess.example.com
+- https://goaccess.example.com
 
 **Note:** It is up to you to make the shown URLs resolvable. The easiest way would be to provide the following row in you local hosts-table (`/etc/hosts`)
 
@@ -133,6 +142,8 @@ $ git clone <BROWSER_URL> /target/folder/
 
 Change into `/target/folder` and open the file `.values` with your favourite editor to change the [environment](#environment) for your deployment.
 
+
+Attention: By default we set the domain to use (when deploying) to `example.com`. This deployment however is set to use SSL together with the `let's encrypt` service. You cannot and will never be able to use `example.com` with `let's encrypt` 
 
 
 
