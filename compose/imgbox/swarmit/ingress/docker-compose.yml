@@ -2,7 +2,7 @@
 services:
   http-code-pages:
     env_file: .env.http-code-pages
-    image: registry.dpl.comstack.de/asset/http-code-pages:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}:80/asset/http-code-pages:swarmit-Q0225b
     labels:
       - com.swarmit.version=0.1
       - traefik.enable=true
@@ -71,7 +71,7 @@ services:
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_PORT: "80"
-      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_PROTOCOL: "https://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
       SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
@@ -99,7 +99,7 @@ services:
         max-buffer-size: 4m
   traefik:
     env_file: .env.traefik
-    image: registry.dpl.comstack.de/asset/traefik:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}:80/asset/traefik:swarmit-Q0225b
     command:
       - --api.dashboard=true
       - --accessLog.filePath=/logs/access.log
@@ -115,6 +115,13 @@ services:
       - --entrypoints.ping.address=:8082
       - --entrypoints.web.address=:80
       - --entrypoints.web.transport.respondingTimeouts.readTimeout=30m
+      - --serversTransport.insecureSkipVerify=${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
+      - --entrypoints.web.http.redirections.entryPoint.to=web-secure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.web-secure.address=:443
+      - --entrypoints.web-secure.transport.respondingTimeouts.readTimeout=30m
+      - --entrypoints.web-secure.forwardedHeaders.insecure=true
+      - --entrypoints.web-secure.proxyProtocol.insecure=true
       - --entrypoints.fsync.address=:9932
       - --entrypoints.fsync.proxyProtocol.insecure=true
       - --entrypoints.git.address=:9922
@@ -216,7 +223,7 @@ services:
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_NETWORK: "imgbox_public"
       SWARMIT_INGRESS_PORT: "80"
-      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_PROTOCOL: "https://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
       SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
@@ -253,7 +260,7 @@ services:
         max-buffer-size: 4m
   httpd:
     env_file: .env.httpd
-    image: registry.dpl.comstack.de/asset/httpd:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}:80/asset/httpd:swarmit-Q0225b
     labels:
       - com.swarmit.version=0.1
       - com.swarmit.asset=imgbox_swarmit_ingress_httpd
@@ -318,7 +325,7 @@ services:
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_PORT: "80"
-      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_PROTOCOL: "https://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
       SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
@@ -346,7 +353,7 @@ services:
         max-buffer-size: 4m
   goaccess:
     env_file: .env.goaccess
-    image: registry.dpl.comstack.de/asset/goaccess:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}:80/asset/goaccess:swarmit-Q0225b
     command:
       - /logs/access.log
       - --log-format=COMBINED
@@ -427,7 +434,7 @@ services:
       SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
       SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
       SWARMIT_INGRESS_PORT: "80"
-      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_PROTOCOL: "https://"
       SWARMIT_INGRESS_REPORTS: "True"
       SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
       SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
