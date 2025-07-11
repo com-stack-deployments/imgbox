@@ -10,7 +10,9 @@ At ComStack we follow the idea: What is good for us and for our clients **cannot
 
 For this reason, we will publish all deployments - we create at ComStack - as `compose-ready` deployments, ready to be deployed **by yourself**.
 
-### TL;DR
+## TL;DR
+
+<div style="border: 1px solid white">
 
 All our published deployments are deployed through 3 simple steps:
 1. Clone this repo and change to the resulting directory
@@ -19,6 +21,8 @@ All our published deployments are deployed through 3 simple steps:
 
 
 **That's all! Have Fun!**
+
+</div>
 
 
 Read on if you want to know more about our `compose-ready` deployment: **imgbox**
@@ -69,13 +73,13 @@ All mandatory environment variables that need your attention or stored in `.valu
 ```bash
 # Define the image tag to set, when image names are calulcated
 # Set by: config/swarmit
-export SWARMIT_IMAGES_IMAGE_TAG="swarmit-Q0225b"
+export SWARMIT_IMAGES_IMAGE_TAG="swarmit-0725"
 # Name of this swarmit asset
 # Set by: internally/imgbox
 export SWARMIT_INFRA="imgbox"
 # Domain to set for deployment
 # Set by: config/swarmit
-export SWARMIT_INGRESS_BASE_DOMAIN="example.com"
+export SWARMIT_INGRESS_BASE_DOMAIN="expample.com"
 # Type of challenge you want to use for letsencrypt
 # Set by: config/swarmit
 export SWARMIT_INGRESS_LE_CHALLENGE_TYPE="http-challenge"
@@ -99,7 +103,7 @@ export SWARMIT_INGRESS_SKIP_SSL_VERIFY="False"
 |Param|Value|Desc|
 |--|--|--|
 |ingress-protocol|https://|Protocol to use for deployment|
-|ingress-base-domain|example.com|Domain to set for deployment|
+|ingress-base-domain|expample.com|Domain to set for deployment|
 |ingress-le-enable|True|Enable cert creation using letsencrypt|
 
 ## Service URLs
@@ -143,8 +147,6 @@ $ git clone <BROWSER_URL> /target/folder/
 
 Change into `/target/folder` and open the file `.values` with your favourite editor to change the [environment](#environment) for your deployment.
 
-
-Attention: By default we set the domain to use (when deploying) to `example.com`. This deployment however is set to use SSL together with the `let's encrypt` service. You cannot and will never be able to use `example.com` with `let's encrypt` 
 
 
 

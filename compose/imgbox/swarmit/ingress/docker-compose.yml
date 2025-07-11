@@ -2,7 +2,7 @@
 services:
   http-code-pages:
     env_file: .env.http-code-pages
-    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/http-code-pages:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/http-code-pages:${SWARMIT_IMAGES_IMAGE_TAG}
     labels:
       - com.swarmit.version=0.1
       - traefik.enable=true
@@ -99,7 +99,7 @@ services:
         max-buffer-size: 4m
   traefik:
     env_file: .env.traefik
-    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/traefik:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/traefik:${SWARMIT_IMAGES_IMAGE_TAG}
     command:
       - --api.dashboard=true
       - --accessLog.filePath=/logs/access.log
@@ -262,7 +262,7 @@ services:
         max-buffer-size: 4m
   httpd:
     env_file: .env.httpd
-    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/httpd:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/httpd:${SWARMIT_IMAGES_IMAGE_TAG}
     labels:
       - com.swarmit.version=0.1
       - com.swarmit.asset=imgbox_swarmit_ingress_httpd
@@ -357,7 +357,7 @@ services:
         max-buffer-size: 4m
   goaccess:
     env_file: .env.goaccess
-    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/goaccess:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/goaccess:${SWARMIT_IMAGES_IMAGE_TAG}
     command:
       - /logs/access.log
       - --log-format=COMBINED

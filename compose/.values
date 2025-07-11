@@ -4,13 +4,13 @@ export COMPOSE_FOLDER="$(pwd)"
 export DOCKERBIN="docker"
 # Define the image tag to set, when image names are calulcated
 # Set by: config/swarmit
-export SWARMIT_IMAGES_IMAGE_TAG="swarmit-Q0225b"
+export SWARMIT_IMAGES_IMAGE_TAG="swarmit-0725"
 # Name of this swarmit asset
 # Set by: internally/imgbox
 export SWARMIT_INFRA="imgbox"
 # Domain to set for deployment
 # Set by: config/swarmit
-export SWARMIT_INGRESS_BASE_DOMAIN="example.com"
+export SWARMIT_INGRESS_BASE_DOMAIN="expample.com"
 # Type of challenge you want to use for letsencrypt
 # Set by: config/swarmit
 export SWARMIT_INGRESS_LE_CHALLENGE_TYPE="http-challenge"

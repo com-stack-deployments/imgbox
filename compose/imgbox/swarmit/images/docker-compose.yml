@@ -92,7 +92,7 @@ services:
         max-buffer-size: 4m
   registry-browser:
     env_file: .env.registry-browser
-    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/registry-browser:swarmit-Q0225b
+    image: registry.${SWARMIT_INGRESS_BASE_DOMAIN}/asset/registry-browser:${SWARMIT_IMAGES_IMAGE_TAG}
     labels:
       - com.swarmit.version=0.1
       - com.swarmit.asset=imgbox_swarmit_images_registry-browser
