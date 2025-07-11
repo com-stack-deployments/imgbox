@@ -121,9 +121,6 @@ services:
       - --entrypoints.git.proxyProtocol.insecure=true
       - --entrypoints.sftpgo.address=:9912
       - --entrypoints.sftpgo.proxyProtocol.insecure=true
-      - --certificatesResolvers.le.acme.email=admin@${SWARMIT_INGRESS_BASE_DOMAIN}
-      - --certificatesResolvers.le.acme.storage=acme.json
-      - --certificatesResolvers.le.acme.httpChallenge.entryPoint=web
       - --log.level=${SWARMIT_INGRESS_LOG_LEVEL}
       - --ping
     labels:
