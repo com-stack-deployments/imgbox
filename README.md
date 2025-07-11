@@ -10,7 +10,9 @@ At ComStack we follow the idea: What is good for us and for our clients **cannot
 
 For this reason, we will publish all deployments - we create at ComStack - as `compose-ready` deployments, ready to be deployed **by yourself**.
 
-### TL;DR
+## TL;DR
+
+<div style="border: 1px solid white">
 
 All our published deployments are deployed through 3 simple steps:
 1. Clone this repo and change to the resulting directory
@@ -19,6 +21,8 @@ All our published deployments are deployed through 3 simple steps:
 
 
 **That's all! Have Fun!**
+
+</div>
 
 
 Read on if you want to know more about our `compose-ready` deployment: **imgbox**
