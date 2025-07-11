@@ -1,0 +1,19 @@
+# SET COMPOSE_FOLDER first
+export COMPOSE_FOLDER="$(pwd)"
+# SET DOCKERBIN to the binary to use
+export DOCKERBIN="docker"
+# Define the image tag to set, when image names are calulcated
+# Set by: config/swarmit
+export SWARMIT_IMAGES_IMAGE_TAG="swarmit-Q0225b"
+# Name of this swarmit asset
+# Set by: internally/imgbox
+export SWARMIT_INFRA="imgbox"
+# Domain to set for deployment
+# Set by: config/swarmit
+export SWARMIT_INGRESS_BASE_DOMAIN="example.com"
+# Loglevel for Traefik
+# Set by: config/swarmit
+export SWARMIT_INGRESS_LOG_LEVEL="ERROR"
+# Define what will be the ingress incoming port
+# Set by: config/swarmit
+export SWARMIT_INGRESS_PORT="80"

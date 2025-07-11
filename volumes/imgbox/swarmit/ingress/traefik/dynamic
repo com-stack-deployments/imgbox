@@ -1,0 +1,65 @@
+http:
+  middlewares:
+    ingress-errors:
+      errors:
+        status:
+          - "400-599"
+        service: error-pages@docker
+        query: "/{status}.html"
+    forward-auth:
+      forwardAuth:
+        address: "http://forward-auth:4181"
+        authResponseHeaders: "X-Forwarded-User, X-Auth-User, X-Secret, X-Forwarded-Uri"
+        trustForwardHeader: true
+    forward-adm-auth:
+      forwardAuth:
+        address: "http://forward-adm-auth:4181"
+        authResponseHeaders: "X-Forwarded-User, X-Auth-User, X-Secret, X-Forwarded-Uri"
+        trustForwardHeader: true
+    intern:
+      ipWhiteList:
+        sourceRange:
+          - 127.0.0.1/32
+          - 192.168.1.0/24
+    internWithSwarm:
+      ipWhiteList:
+        sourceRange:
+          - 127.0.0.1/32
+          - 192.168.1.0/24
+          - 172.18.0.1
+    corsHeader:
+      headers:
+        accessControlAllowOriginList: " http://registry.${SWARMIT_INGRESS_BASE_DOMAIN} http://images.${SWARMIT_INGRESS_BASE_DOMAIN} http://logs.${SWARMIT_INGRESS_BASE_DOMAIN} http://proxy.${SWARMIT_INGRESS_BASE_DOMAIN}/dashboard/ http://webaccess.${SWARMIT_INGRESS_BASE_DOMAIN} http://goaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
+        accessControlMaxAge: 100
+        accessControlAllowCredentials: true
+        accessControlAllowMethods: "GET,OPTIONS,PUT"    
+        addVaryHeader: true
+    frameHeader:
+      headers:
+        contentSecurityPolicy: "frame-ancestors http://registry.${SWARMIT_INGRESS_BASE_DOMAIN} http://images.${SWARMIT_INGRESS_BASE_DOMAIN} http://logs.${SWARMIT_INGRESS_BASE_DOMAIN} http://proxy.${SWARMIT_INGRESS_BASE_DOMAIN}/dashboard/ http://webaccess.${SWARMIT_INGRESS_BASE_DOMAIN} http://goaccess.${SWARMIT_INGRESS_BASE_DOMAIN}"
+    forward-auth-svc:
+      headers:
+        SSLRedirect: true
+        browserXSSFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        STSSeconds: 315360000
+        STSIncludeSubdomains: true
+        STSPreload: true
+        frameDeny: true
+    forward-adm-auth-svc:
+      headers:
+        SSLRedirect: true
+        browserXSSFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        STSSeconds: 315360000
+        STSIncludeSubdomains: true
+        STSPreload: true
+        frameDeny: true
+    forward-proxy-headers:
+      headers:
+        addVaryHeader: true
+        sslProxyHeaders:
+          X-Forwarded-Proto: "https"
+          X-Scheme: "https"

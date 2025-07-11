@@ -1,0 +1,189 @@
+---
+services:
+  registry:
+    env_file: .env.registry
+    image: registry:2
+    labels:
+      - com.swarmit.version=0.1
+      - com.swarmit.asset=imgbox_swarmit_images_registry
+      - com.swarmit.feature.images.enabled=True
+      - com.swarmit.images.version=alpha-0.1
+      - com.swarmit.feature.core.enabled=True
+      - com.swarmit.core.version=alpha-0.1
+      - com.swarmit.feature.ingress.enabled=True
+      - com.swarmit.ingress.version=alpha-0.1
+      - com.swarmit.asset.isPublic=True
+      - traefik.constraint-label=traefik-public
+      - traefik.http.services.imgbox_swarmit_images_registry.loadbalancer.server.port=5000
+      - traefik.http.routers.imgbox_swarmit_images_registry.entrypoints=web
+      - traefik.http.routers.imgbox_swarmit_images_registry.rule=Host(`registry.${SWARMIT_INGRESS_BASE_DOMAIN}`)
+    deploy:
+      endpoint_mode: dnsrr
+      placement:
+        constraints:
+          - node.role == manager
+    healthcheck:
+      test: ['CMD', '/usr/bin/nc', '-z', 'localhost', '5000']
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      start_period: 3s
+    environment:
+      INFRA_INGRESS_DOMAIN: ".${SWARMIT_INGRESS_BASE_DOMAIN}"
+      INFRA_INGRESS_URL: "http://${SWARMIT_INGRESS_BASE_DOMAIN}"
+      REGISTRY_HTTP_SECRET: "somesecret"
+      REGISTRY_STORAGE_DELETE_ENABLED: "True"
+      SERVICE_INGRESS_DOMAIN: "registry.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SERVICE_INGRESS_URL: "http://registry.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_BOX: "swarmit"
+      SWARMIT_CORE_ENABLED: "[]"
+      SWARMIT_IMAGES_ENABLED: "[]"
+      SWARMIT_IMAGES_IMAGE_TAG: ${SWARMIT_IMAGES_IMAGE_TAG}
+      SWARMIT_IMAGES_REGISTRY_DOMAIN: "registry.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_IMAGES_REGISTRY_URL: ${SWARMIT_IMAGES_REGISTRY_URL}
+      SWARMIT_INFRA: ${SWARMIT_INFRA}
+      SWARMIT_INFRA_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_INGRESS_ASSET_DOMAIN: "True"
+      SWARMIT_INGRESS_BASE_DOMAIN: ${SWARMIT_INGRESS_BASE_DOMAIN}
+      SWARMIT_INGRESS_BOX_DOMAIN: "True"
+      SWARMIT_INGRESS_DASHBOARD: "True"
+      SWARMIT_INGRESS_ERROR_PAGES: "True"
+      SWARMIT_INGRESS_INFRA_DOMAIN: "True"
+      SWARMIT_INGRESS_LE_CHALLENGE_TYPE: "http-challenge"
+      SWARMIT_INGRESS_LE_DNS_CHALLENGE_DELAY: "5"
+      SWARMIT_INGRESS_LE_DNS_ENV_NAME: ""
+      SWARMIT_INGRESS_LE_DNS_KEY: "secret"
+      SWARMIT_INGRESS_LE_DNS_PROVIDER: ""
+      SWARMIT_INGRESS_LE_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_INGRESS_LE_EMAIL: "mail@${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_INGRESS_LE_ENABLE: "False"
+      SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
+      SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_INGRESS_PORT: "80"
+      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_REPORTS: "True"
+      SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
+      SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
+      SWARMIT_INGRESS_STACK_DOMAIN: "True"
+      SWARMIT_LOGOHOST: ${SWARMIT_LOGOHOST}
+      SWARMIT_PATH: "/app/swarmit/"
+      SWARMIT_PROVIDER: "swarm"
+      SWARMIT_SERVICE: "registry"
+      SWARMIT_SERVICE_DOMAIN: "registry.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_STACK: "images"
+      SWARMIT_VOLUMES_PATH: "/tmp/imgbox"
+    networks:
+      imgbox_public:
+      imgbox_registry:
+    volumes:
+      - imgbox_swarmit_hooks:/var/lib/swarmit/hooks"
+      - /usr/share/zoneinfo/Europe/Berlin:/etc/localtime:ro
+      - imgbox_swarmit_images_registry_data:/var/lib/registry:rw"
+      # configs as volumes
+      - ${COMPOSE_FOLDER}/configs/imgbox/swarmit/images/registry/config/config.yml-0925.config:/etc/docker/registry/config.yml
+    logging:
+      driver: json-file
+      options:
+        max-size: 40m
+        max-file: 2
+        mode: non-blocking
+        max-buffer-size: 4m
+  registry-browser:
+    env_file: .env.registry-browser
+    image: registry.dpl.comstack.de/asset/registry-browser:swarmit-Q0225b
+    labels:
+      - com.swarmit.version=0.1
+      - com.swarmit.asset=imgbox_swarmit_images_registry-browser
+      - com.swarmit.feature.images.enabled=True
+      - com.swarmit.images.version=alpha-0.1
+      - com.swarmit.feature.core.enabled=True
+      - com.swarmit.core.version=alpha-0.1
+      - com.swarmit.feature.ingress.enabled=True
+      - com.swarmit.ingress.version=alpha-0.1
+      - com.swarmit.asset.isPublic=True
+      - traefik.constraint-label=traefik-public
+      - traefik.http.services.imgbox_swarmit_images_registry-browser.loadbalancer.server.port=8080
+      - traefik.http.routers.imgbox_swarmit_images_registry-browser.entrypoints=web
+      - traefik.http.routers.imgbox_swarmit_images_registry-browser.middlewares=ingress-errors@file
+      - traefik.http.routers.imgbox_swarmit_images_registry-browser.rule=Host(`images.${SWARMIT_INGRESS_BASE_DOMAIN}`)
+    deploy:
+      endpoint_mode: dnsrr
+      placement:
+        constraints:
+          - node.role == manager
+    healthcheck:
+      test: ["CMD", "/healthcheck", "-tcp", "127.0.0.1:8080"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    environment:
+      DOCKER_REGISTRY_URL: "http://registry:5000/v2"
+      INFRA_INGRESS_DOMAIN: ".${SWARMIT_INGRESS_BASE_DOMAIN}"
+      INFRA_INGRESS_URL: "http://${SWARMIT_INGRESS_BASE_DOMAIN}"
+      PUBLIC_REGISTRY_URL: "${SWARMIT_IMAGES_REGISTRY_DOMAIN}"
+      SECRET_KEY_BASE: "SECRET_KEY_BASE"
+      SERVICE_INGRESS_DOMAIN: "images.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SERVICE_INGRESS_URL: "http://images.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_BOX: "swarmit"
+      SWARMIT_CORE_ENABLED: "[]"
+      SWARMIT_IMAGES_ENABLED: "[]"
+      SWARMIT_IMAGES_IMAGE_TAG: ${SWARMIT_IMAGES_IMAGE_TAG}
+      SWARMIT_IMAGES_REGISTRY_DOMAIN: "registry.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_IMAGES_REGISTRY_URL: ${SWARMIT_IMAGES_REGISTRY_URL}
+      SWARMIT_INFRA: ${SWARMIT_INFRA}
+      SWARMIT_INFRA_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_INGRESS_ASSET_DOMAIN: "True"
+      SWARMIT_INGRESS_BASE_DOMAIN: ${SWARMIT_INGRESS_BASE_DOMAIN}
+      SWARMIT_INGRESS_BOX_DOMAIN: "True"
+      SWARMIT_INGRESS_DASHBOARD: "True"
+      SWARMIT_INGRESS_ERROR_PAGES: "True"
+      SWARMIT_INGRESS_INFRA_DOMAIN: "True"
+      SWARMIT_INGRESS_LE_CHALLENGE_TYPE: "http-challenge"
+      SWARMIT_INGRESS_LE_DNS_CHALLENGE_DELAY: "5"
+      SWARMIT_INGRESS_LE_DNS_ENV_NAME: ""
+      SWARMIT_INGRESS_LE_DNS_KEY: "secret"
+      SWARMIT_INGRESS_LE_DNS_PROVIDER: ""
+      SWARMIT_INGRESS_LE_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_INGRESS_LE_EMAIL: "mail@${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_INGRESS_LE_ENABLE: "False"
+      SWARMIT_INGRESS_LOG_LEVEL: "ERROR"
+      SWARMIT_INGRESS_MAIL_DOMAIN: "${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_INGRESS_PORT: "80"
+      SWARMIT_INGRESS_PROTOCOL: "http://"
+      SWARMIT_INGRESS_REPORTS: "True"
+      SWARMIT_INGRESS_SERVICE_DOMAIN: "True"
+      SWARMIT_INGRESS_SKIP_SSL_VERIFY: ${SWARMIT_INGRESS_SKIP_SSL_VERIFY}
+      SWARMIT_INGRESS_STACK_DOMAIN: "True"
+      SWARMIT_LOGOHOST: ${SWARMIT_LOGOHOST}
+      SWARMIT_PATH: "/app/swarmit/"
+      SWARMIT_PROVIDER: "swarm"
+      SWARMIT_SERVICE: "registry-browser"
+      SWARMIT_SERVICE_DOMAIN: "images.${SWARMIT_INGRESS_BASE_DOMAIN}"
+      SWARMIT_STACK: "images"
+      SWARMIT_VOLUMES_PATH: "/tmp/imgbox"
+    networks:
+      imgbox_public:
+      imgbox_registry:
+    volumes:
+      - imgbox_swarmit_hooks:/var/lib/swarmit/hooks"
+      - /usr/share/zoneinfo/Europe/Berlin:/etc/localtime:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: 40m
+        max-file: 2
+        mode: non-blocking
+        max-buffer-size: 4m
+volumes:
+  imgbox_swarmit_hooks:
+    name: imgbox_swarmit_hooks
+    external: true
+  imgbox_swarmit_images_registry_data:
+    name: imgbox_swarmit_images_registry_data
+    external: true
+networks:
+  imgbox_public:
+    external: true
+  imgbox_registry:
+    external: true
