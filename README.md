@@ -73,13 +73,13 @@ All mandatory environment variables that need your attention or stored in `.valu
 ```bash
 # Define the image tag to set, when image names are calulcated
 # Set by: config/swarmit
-export SWARMIT_IMAGES_IMAGE_TAG="swarmit-Q0225b"
+export SWARMIT_IMAGES_IMAGE_TAG="swarmit-0725"
 # Name of this swarmit asset
 # Set by: internally/imgbox
 export SWARMIT_INFRA="imgbox"
 # Domain to set for deployment
 # Set by: config/swarmit
-export SWARMIT_INGRESS_BASE_DOMAIN="example.com"
+export SWARMIT_INGRESS_BASE_DOMAIN="expample.com"
 # Loglevel for Traefik
 # Set by: config/swarmit
 export SWARMIT_INGRESS_LOG_LEVEL="ERROR"
@@ -94,7 +94,7 @@ export SWARMIT_INGRESS_PORT="80"
 |Param|Value|Desc|
 |--|--|--|
 |ingress-protocol|http://|Protocol to use for deployment|
-|ingress-base-domain|example.com|Domain to set for deployment|
+|ingress-base-domain|expample.com|Domain to set for deployment|
 
 ## Service URLs
 
