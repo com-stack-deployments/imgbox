@@ -89,9 +89,8 @@ export SWARMIT_INGRESS_PORT="80"
 
 |Param|Value|Desc|
 |--|--|--|
-|ingress-protocol|https://|Protocol to use for deployment|
+|ingress-protocol|http://|Protocol to use for deployment|
 |ingress-base-domain|example.com|Domain to set for deployment|
-|ingress-le-enable|True|Enable cert creation using letsencrypt|
 
 ## Service URLs
 
